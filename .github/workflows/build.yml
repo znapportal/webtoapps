@@ -1,0 +1,27 @@
+name: Build Android APK
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'App Name'
+        required: true
+        default: 'My App'
+      website_url:
+        description: 'Website URL'
+        required: true
+        default: 'https://google.com'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup and Initialize Capacitor
+        run: |
+          npx cap init "${{ github.event.inputs.app_name }}" "com.example.app" --web-dir "www"
+          mkdir www
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${{ github.event.inputs.website_url }}"></head><body></body></html>' > www/index.html
+          npx cap add android
+
+      - name: Configure Android Custom Settings
+        run: |
+          echo "Add your android configuration commands here"
